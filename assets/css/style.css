@@ -1,3 +1,12 @@
-body {
-	color: blue;
+.jumbotron {
+	background-color: black;
+	color: white;
+	text-align: center;
+	padding: 10px;
+}
+
+.shape {
+	display: block;
+    margin: auto;
+
 }
