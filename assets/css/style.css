@@ -49,8 +49,12 @@
 	color: #800000
 }
 
-/*.panel-body {
-	text-align: center;
-	display: block;
-	margin: auto;
+/*// Class
+.center-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }*/
+.score {
+	text-align: center
+}
