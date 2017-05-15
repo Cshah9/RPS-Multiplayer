@@ -1,0 +1,16 @@
+.jumbotron {
+	background-color: black;
+	color: white;
+	text-align: center;
+	padding: 10px;
+}
+
+.shape-icon {
+    height: 50px;
+    width: 50px;
+}
+
+.shape-choice {
+	display: block;
+    margin: auto;
+}
