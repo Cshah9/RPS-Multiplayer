@@ -1,13 +1,14 @@
 var debugMode = true;
 
 
-/*debug - console logs up to 2 strings if debugMode flag is set to true */
+/*debug - console logs arg(s) if debugMode flag is set to true */
+// function debug(description) {
+
+// 	if(debugMode) console.log(description);	
+// }
 function debug(description, info) {
 
-	if(debugMode) {
-		if (info) console.log(description, info);
-		else console.log(description);
-	}
+	if(debugMode) console.log(description, info);
 	
 }
 
@@ -15,6 +16,24 @@ debug("game.js");
 
 var playerName = "";
 var playerId = 0;
+var hasPlayer1Joined = false;
+var hasPlayer2Joined = false;
+
+var gameData;
+var newGame = {
+			chat: "",
+			player1 : {
+				name: "",
+				joined: false,
+				choice: ""
+			},
+			player2 : {
+				name: "",
+				joined: false,
+				choice: ""
+			},
+			turn:0
+		}
 
 // Initialize Firebase
 var config = {
@@ -34,15 +53,62 @@ database.ref().on("value", function(snapshot) {
 	if (snapshot.val() === null) {
 		//new game is starting
 		debug("snapshot is null");
+
+		database.ref().set(newGame);
 		return;
 	}
 	else {
-		
-		var p1 = snapshot.val().player1;
-		var p2 = snapshot.val().player2;
 
-		debug("onValue p1:", p1);
-		debug("onValue p2:", p2);
+		console.log(snapshot.val());
+		gameData = snapshot.val();
+
+		if(gameData.player1.joined && !gameData.player2.joined && gameData.turn == 0) {
+		//new game, and player 1 has joined
+			if(playerId == 1) {
+			    $("#player-1-waiting").toggle();
+				$("#player-1-panel").toggleClass("panel-warning panel-info");
+				$("#player-1-choices").toggle();
+				$("#player-1-score").toggle();
+
+				$("#sign-in-alert").toggleClass("alert-warning alert-success");
+				$(".sign-in").remove();
+			    $("#sign-in-row").append("<p>Hi <span class='label label-success'>" + gameData.player1.name + "</span> ! You are player " + playerId + ".</p>");
+			}
+
+			if(playerId==0) 
+			{
+				//second player that hasn't joined yet
+				debug("second player that hasn't joined yet")
+				$("#player-1-waiting").toggle();
+				$("#player-1-joined").toggle();
+				$("#player-1-panel").toggleClass("panel-warning panel-success");
+
+			}
+		}
+
+		else if(gameData.player1.joined && gameData.player2.joined && gameData.turn ==0) {
+			//new game, and player 2 has joined
+			if(playerId == 1) {
+				debug("second player has joined")
+				$("#player-2-waiting").toggle();
+				$("#player-2-joined").toggle();
+				$("#player-2-panel").toggleClass("panel-warning panel-success");
+
+			}
+
+			if(playerId==2) 
+			{
+				//second player 
+				$("#player-2-waiting").toggle();
+				$("#player-2-panel").toggleClass("panel-warning panel-info");
+				$("#player-2-choices").toggle();
+				$("#player-2-score").toggle();
+
+				$("#sign-in-alert").toggleClass("alert-warning alert-success");
+				$(".sign-in").remove();
+			    $("#sign-in-row").append("<p>Hi <span class='label label-success'>" + gameData.player2.name + "</span> ! You are player " + playerId + ".</p>");
+			}
+		}
 
 	}
 
@@ -63,8 +129,7 @@ $("#sign-in").click(function(){
 	debug("#sign-in on-click");
 	playerName = $("#name").val().trim();
 	debug(playerName);
-	$("#sign-in-alert").toggleClass("alert-warning alert-success");
-	$(".sign-in").remove();
+
 	
 
 	/*
@@ -76,18 +141,34 @@ $("#sign-in").click(function(){
 	 may need to move toggle functions to on Value
 	 */
 
+	// if gameData.player1.joined and gameData.player2.joined are both false, then no players
+	if(!gameData.player1.joined && !gameData.player2.joined) {
+		//new game, and this is player 1
+		playerId = 1; 
+		gameData.player1.joined = true;
+		gameData.player1.name = playerName;
+		gameData.turn=0;
+      	database.ref().set(gameData);
 
-      database.ref().set({
-        player1: playerName
-      });
-     $("#sign-in-row").append("<p>Hi <span class='label label-success'>" + playerName + "</span> ! You are player " + playerId + ".</p>");
-      
-	$("#player-1-waiting").toggle();
-	$("#player-1-panel").toggleClass("panel-warning panel-info");
-	$("#player-1-choices").toggle();
-	$("#player-1-score").toggle();
+
+      	
+  	}
+  	// if gameData.player1.joined is trued and gameData.player2.joined is false, then this is 2nd player
+  	else if(gameData.player1.joined && !gameData.player2.joined) {
+  		//new game, and this is player 2
+  		playerId = 2;
+		gameData.player2.joined = true;
+		gameData.player2.name = playerName;
+      	database.ref().set(gameData);
+      	 
+  	}
+
+  	else {
+    	//something is wrong so alert the user and quit
+    	alert('Game is out of sync. Please reset and start again');
+    	return;
+    }
 	
-
 })
 
 function choiceMade(){
@@ -110,6 +191,8 @@ function initalizeGame() {
 	debug("initalizeGame()");
 
 	//hide game choices until user logs in
+	$("#player-1-joined").toggle();
+	$("#player-2-joined").toggle();
 	$("#player-1-choices").toggle();
 	$("#player-2-choices").toggle();
 	$("#player-1-score").toggle();
@@ -117,9 +200,13 @@ function initalizeGame() {
 	
 }
 
-/*
-database.ref().remove();
+$("#reset").click(function(){
+	
+	event.preventDefault();
 
-add clear or restart button to clear the firebase db
-*/
+	database.ref().remove();
+
+	alert("Game has been reset");
+
+});
 
