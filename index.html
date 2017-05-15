@@ -17,8 +17,18 @@
 		<div class="row" id="jumbotron">
 			<div class="col-md-12">
 				<div class="jumbotron">
-				  <h1>Rock Paper Scissors</h1>
-				  <p>Are you ready to <a href="https://en.wikipedia.org/wiki/Rock%E2%80%93paper%E2%80%93scissors">Rrrrrrrochambeau!</a></p>
+					<h1>Rock Paper Scissors</h1>
+					<p>Are you ready to <a href="https://en.wikipedia.org/wiki/Rock%E2%80%93paper%E2%80%93scissors">Rrrrrrrochambeau!</a></p>
+					<div class="alert alert-warning" id="sign-in-alert">
+						<div class="row" id="sign-in-row">
+							<div class="col-xs-9 sign-in">
+								<input type="text" class="form-control" id="name" placeholder="Enter your name">
+							</div>
+							<div class="col-xs-3 sign-in">
+								<button type="submit" class="btn btn-warning" id="sign-in">Sign In</button>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -29,6 +39,7 @@
 				<div class="panel panel-info">
 	  				<div class="panel-heading player-title">Player 1</div>
  					<div class="panel-body player-panel" id="player-1-panel">
+ 						<div id="player-1-choices"></div>
 						<div class="row">
 							<div class="shape-choice paper" data-value="paper" data-player="player1">
 								<img src="assets/images/paper-hand.png" class="img-circle shape-icon" data-value="paper"/>
@@ -70,25 +81,27 @@
 				<div class="panel panel-info">
 	  				<div class="panel-heading player-title">Player 2</div>
  					<div class="panel-body player-panel" id="player-2-panel">
-						<div class="row">
-							<div class="shape-choice paper" data-value="paper" data-player="player2">
-								<img src="assets/images/paper-image.png" class="img-circle shape-icon" data-value="paper"/>
-								Paper
-								<img src="assets/images/paper-hand.png" class="img-circle shape-icon"/>
+ 						<div id="player-2-choices">
+							<div class="row">
+								<div class="shape-choice paper" data-value="paper" data-player="player2">
+									<img src="assets/images/paper-image.png" class="img-circle shape-icon" data-value="paper"/>
+									Paper
+									<img src="assets/images/paper-hand.png" class="img-circle shape-icon"/>
+								</div>
 							</div>
-						</div>
-						<div class="row">
-							<div class="shape-choice scissors" data-value="scissors" data-player="player2">
-								<img src="assets/images/scissors-image.png" class="img-circle shape-icon" data-value="scissors"/>
-								Scissors
-								<img src="assets/images/scissors-hand.png" class="img-circle shape-icon"/>
+							<div class="row">
+								<div class="shape-choice scissors" data-value="scissors" data-player="player2">
+									<img src="assets/images/scissors-image.png" class="img-circle shape-icon" data-value="scissors"/>
+									Scissors
+									<img src="assets/images/scissors-hand.png" class="img-circle shape-icon"/>
+								</div>
 							</div>
-						</div>
-						<div class="row">
-							<div class="shape-choice rock" data-value="rock" data-player="player2">
-								<img src="assets/images/rock-image.png" class="img-circle shape-icon" data-value="rock"/>
-								Rock
-								<img src="assets/images/rock-hand.png" class="img-circle shape-icon"/>
+							<div class="row">
+								<div class="shape-choice rock" data-value="rock" data-player="player2">
+									<img src="assets/images/rock-image.png" class="img-circle shape-icon" data-value="rock"/>
+									Rock
+									<img src="assets/images/rock-hand.png" class="img-circle shape-icon"/>
+								</div>
 							</div>
 						</div>
  					</div>
